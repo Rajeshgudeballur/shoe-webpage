@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike Air Jordan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    transition: background 0.8s ease-in-out;
+}
+.container.red { background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%); }
+.container.blue { background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); }
+.container.black { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); }
+.container.brown { background: linear-gradient(135deg, #8b4513 0%, #5c3317 100%); }
+.container.orange { background: linear-gradient(135deg, #e29530 0%, #b6660b 100%); }
+.container.white { background: linear-gradient(135deg, #665f5f 0%, #ffffff 100%); }
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-left {
+    display: flex;
+    gap: 30px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.nav-left span {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.nav-left span:hover {
+    opacity: 0.7;
+    transform: translateY(-2px);
+}
+
+.nav-left span.active {
+    color: #ffd700;
+}
+
+.nav-left span::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+}
+
+.nav-left span:hover::after,
+.nav-left span.active::after {
+    width: 100%;
+    background: #ffd700;
+}
+
+.logo {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.nav-right {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.nav-icon:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Cart Icon */
+.cart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon::before {
+    content: '🛒';
+    font-size: 16px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Cart Modal */
+.cart-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-modal.active {
+    display: flex;
+}
+
+.cart-content {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.close-cart:hover {
+    background: #f0f0f0;
+}
+
+.cart-items {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.empty-cart {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+}
+
+.cart-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.cart-item-price {
+    color: #666;
+    font-size: 14px;
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    background: #f0f0f0;
+    border: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.quantity-btn:hover {
+    background: #e0e0e0;
+}
+
+.remove-item {
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.remove-item:hover {
+    background: #cc0000;
+}
+
+.cart-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+}
+
+.cart-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.checkout-btn:hover {
+    background: #0056b3;
+}
+
+/* Page Sections */
+.page-section {
+    min-height: 100vh;
+    display: none;
+    position: relative;
+}
+
+.page-section.active {
+    display: block;
+}
+
+/* NEW Section (Current Jordan Slider) */
+.new-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 80px;
+    position: relative;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.text-section {
+    flex: 1;
+    max-width: 500px;
+    z-index: 50;
+}
+
+.jordan-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.12);
+    line-height: 0.8;
+    margin-bottom: 30px;
+    user-select: none;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    letter-spacing: -8px;
+}
+
+.product-info {
+    color: white;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 60;
+}
+
+.product-name {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.product-price {
+    font-size: 32px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.product-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 25px 0;
+    max-width: 350px;
+}
+
+.add-to-bag {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    text-transform: uppercase;
+}
+
+.add-to-bag:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Shoe Section */
+.shoe-section {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+}
+
+.shoe-container {
+    position: relative;
+    width: 700px;
+    height: 500px;
+}
+
+.shoe {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+}
+
+.shoe.active {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+    z-index: 10;
+}
+
+.shoe.next {
+    opacity: 0;
+    transform: translateY(100px) scale(0.7) rotate(15deg);
+    z-index: 5;
+}
+
+.shoe.prev {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.7) rotate(-15deg);
+    z-index: 1;
+}
+
+.shoe-1 {
+    background-image: url('images/WMNS+AIR+JORDAN+1+RETRO+HI+OG_red_-removebg-preview.png');
+}
+
+.shoe-2 {
+    background-image: url('images/AIR+JORDAN+1+RTR+HIGH+OG+_GS_-removebg-preview.png');
+}
+
+.shoe-3 {
+    background-image: url('images/AIR+JORDAN+1+LOW_Black_-removebg-preview.png');
+}
+
+.shoe-4 {
+    background-image: url('images/AIR+JORDAN+1+RETRO+LOW_brown_-removebg-preview.png');
+}
+
+.shoe-5 {
+    background-image: url('images/AIR+JORDAN+1+RETRO+HIGH+OG-removebg-preview.png');
+}
+
+.shoe-6 {
+    background-image: url('images/WMNS+AIR+JORDAN+1+HIGH+OG-removebg-preview.png');
+}
+
+/* Controls */
+.controls {
+    position: absolute;
+    bottom: 60px;
+    left: 80px;
+    display: flex;
+    gap: 20px;
+    z-index: 100;
+}
+
+.control-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Color Indicators */
+.color-indicators {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+}
+
+.color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.color-dot.active {
+    transform: scale(1.3);
+    border-color: white;
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+.color-dot.red { background: #dc143c; }
+.color-dot.blue { background: #1e3a8a; }
+.color-dot.black { background: #1f2937; }
+.color-dot.brown { background: #8b4513; }
+.color-dot.orange { background: #eb7303; }
+.color-dot.white { background: #f1f1f1; border-color: #ccc; }
+
+/* SNEAKERS Section */
+.sneakers-section {
+    padding: 100px 40px 40px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+}
+
+.sneakers-section h1 {
+    color: white;
+    font-size: 48px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 60px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.sneakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.sneaker-container {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sneaker-container:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sneaker-image {
+    width: 100%;
+    height: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+.sneaker-info h3 {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.sneaker-info p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.sneaker-price {
+    color: #64ffda;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.sneaker-btn {
+    background: linear-gradient(45deg, #64ffda, #18ffff);
+    color: #1a1a2e;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.sneaker-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .jordan-text {
+        font-size: 140px;
+    }
+    
+    .shoe-container {
+        width: 500px;
+        height: 350px;
+    }
+    
+    .shoe {
+        width: 450px;
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .new-section {
+        padding: 100px 40px 40px;
+    }
+
+    .jordan-text {
+        font-size: 100px;
+        letter-spacing: -4px;
+    }
+
+    .product-name {
+        font-size: 28px;
+    }
+
+    .product-price {
+        font-size: 24px;
+    }
+
+    .shoe-container {
+        width: 350px;
+        height: 250px;
+    }
+
+    .shoe {
+        width: 300px;
+        height: 200px;
+    }
+
+    .controls {
+        left: 40px;
+        bottom: 40px;
+    }
+
+    .sneakers-section h1 {
+        font-size: 36px;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-info > * {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.product-name {
+    animation-delay: 0.1s;
+}
+
+.product-price {
+    animation-delay: 0.2s;
+}
+
+.product-description {
+    animation-delay: 0.3s;
+}
+
+.add-to-bag {
+    animation-delay: 0.4s;
+}</style>
+</head>
+<body>
+  <div class="container red" id="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="nav-left">
+        <span class="nav-item active" data-section="new">NEW</span>
+        <span class="nav-item" data-section="sneakers">SNEAKERS</span>     
+      </div>
+      <div class="logo">R</div>
+      <div class="nav-right">
+        <div class="nav-icon"></div>
+        <div class="nav-icon cart-icon" id="cart-btn">
+          <span class="cart-count" id="cart-count">0</span>
+        </div>
+        <div class="nav-icon"></div>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+      <div class="cart-content">
+        <div class="cart-header">
+          <h2>Shopping Cart</h2>
+          <button class="close-cart" id="close-cart">×</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+          <div class="empty-cart">Your cart is empty</div>
+        </div>
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span>Total: <span id="cart-total">$0</span></span>
+          </div>
+          <button class="checkout-btn">Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW Section (Current Jordan Slider) -->
+    <div class="page-section active" id="new-section">
+      <div class="new-section">
+        <div class="content-wrapper">
+          <div class="jordan-text">JORDAN</div>
+
+          <div class="shoe-section">
+            <div class="shoe-container">
+              <div class="shoe shoe-1 active" id="shoe-0"></div>
+              <div class="shoe shoe-2 next" id="shoe-1"></div>
+              <div class="shoe shoe-3 next" id="shoe-2"></div>
+              <div class="shoe shoe-4 next" id="shoe-3"></div>
+              <div class="shoe shoe-5 next" id="shoe-4"></div>
+              <div class="shoe shoe-6 next" id="shoe-5"></div>
+            </div>
+          </div>
+
+          <div class="text-section">
+            <div class="product-info">
+              <div class="product-name" id="product-name">Jordan Red</div>
+              <div class="product-price" id="product-price">$125</div>
+              <div class="product-description" id="product-description">
+                Inspired by the original AJ1, this mid-top edition maintains the iconic look you love while choice colors and crisp leather give it a distinct identity.
+              </div>
+            </div>
+            <button class="add-to-bag" id="add-to-bag-main">ADD TO CART</button>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <div class="control-btn" id="prev-btn">←</div>
+          <div class="control-btn" id="next-btn">→</div>
+        </div>
+
+        <!-- Color Indicators -->
+        <div class="color-indicators">
+          <div class="color-dot red active" data-index="0"></div>
+          <div class="color-dot blue" data-index="1"></div>
+          <div class="color-dot black" data-index="2"></div>
+          <div class="color-dot brown" data-index="3"></div>
+          <div class="color-dot orange" data-index="4"></div>
+          <div class="color-dot white" data-index="5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNEAKERS Section -->
+    <div class="page-section" id="sneakers-section">
+      <div class="sneakers-section">
+        <h1>SNEAKERS COLLECTION</h1>
+        <div class="sneakers-grid">
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/WMNS+AIR+JORDAN+1+RETRO+HI+OG_red_-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 Red</h3>
+              <p>Classic Chicago colorway with premium leather</p>
+              <div class="sneaker-price">$125</div>
+              <button class="sneaker-btn" data-name="Jordan 1 Red" data-price="125" data-image="images/WMNS+AIR+JORDAN+1+RETRO+HI+OG_red_-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/AIR+JORDAN+1+RTR+HIGH+OG+_GS_-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 Blue</h3>
+              <p>Royal blue edition with modern comfort</p>
+              <div class="sneaker-price">$145</div>
+              <button class="sneaker-btn" data-name="Jordan 1 Blue" data-price="145" data-image="images/AIR+JORDAN+1+RTR+HIGH+OG+_GS_-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/AIR+JORDAN+1+LOW_Black_-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 Black</h3>
+              <p>Sleek black design for versatile styling</p>
+              <div class="sneaker-price">$135</div>
+              <button class="sneaker-btn" data-name="Jordan 1 Black" data-price="135" data-image="images/AIR+JORDAN+1+LOW_Black_-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/AIR+JORDAN+1+RETRO+LOW_brown_-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 Brown</h3>
+              <p>Rich earthy tones with premium materials</p>
+              <div class="sneaker-price">$150</div>
+              <button class="sneaker-btn" data-name="Jordan 1 Brown" data-price="150" data-image="images/AIR+JORDAN+1+RETRO+LOW_brown_-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/AIR+JORDAN+1+RETRO+HIGH+OG-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 Orange</h3>
+              <p>Bold orange colorway for statement style</p>
+              <div class="sneaker-price">$140</div>
+              <button class="sneaker-btn" data-name="Jordan 1 Orange" data-price="140" data-image="images/AIR+JORDAN+1+RETRO+HIGH+OG-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+          <div class="sneaker-container">
+            <div class="sneaker-image" style="background-image: url('images/WMNS+AIR+JORDAN+1+HIGH+OG-removebg-preview.png');"></div>
+            <div class="sneaker-info">
+              <h3>Jordan 1 White</h3>
+              <p>Clean minimalist design in pristine white</p>
+              <div class="sneaker-price">$120</div>
+              <button class="sneaker-btn" data-name="Jordan 1 White" data-price="120" data-image="images/WMNS+AIR+JORDAN+1+HIGH+OG-removebg-preview.png">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Jordan Website JavaScript
+
+// Global variables
+let currentSlide = 0;
+let cart = [];
+let isTransitioning = false;
+
+// Shoe data
+const shoes = [
+    {
+        name: "Jordan 1 Red",
+        price: 125,
+        description: "Inspired by the original AJ1, this mid-top edition maintains the iconic look you love while choice colors and crisp leather give it a distinct identity.",
+        image: "images/WMNS+AIR+JORDAN+1+RETRO+HI+OG_red_-removebg-preview.png",
+        color: "red"
+    },
+    {
+        name: "Jordan 1 Blue",
+        price: 145,
+        description: "Royal blue edition with modern comfort and iconic basketball heritage that never goes out of style.",
+        image: "images/AIR+JORDAN+1+RTR+HIGH+OG+_GS_-removebg-preview.png",
+        color: "blue"
+    },
+    {
+        name: "Jordan 1 Black",
+        price: 135,
+        description: "Sleek black design for versatile styling. Perfect for both court and street with timeless appeal.",
+        image: "images/AIR+JORDAN+1+LOW_Black_-removebg-preview.png",
+        color: "black"
+    },
+    {
+        name: "Jordan 1 Brown",
+        price: 150,
+        description: "Rich earthy tones with premium materials. A sophisticated take on the classic silhouette.",
+        image: "images/AIR+JORDAN+1+RETRO+LOW_brown_-removebg-preview.png",
+        color: "brown"
+    },
+    {
+        name: "Jordan 1 Orange",
+        price: 140,
+        description: "Bold orange colorway for statement style. Stand out from the crowd with this vibrant edition.",
+        image: "images/AIR+JORDAN+1+RETRO+HIGH+OG-removebg-preview.png",
+        color: "orange"
+    },
+    {
+        name: "Jordan 1 White",
+        price: 120,
+        description: "Clean minimalist design in pristine white. The perfect canvas for any outfit combination.",
+        image: "images/WMNS+AIR+JORDAN+1+HIGH+OG-removebg-preview.png",
+        color: "white"
+    }
+];
+
+// DOM Elements
+const container = document.getElementById('container');
+const productName = document.getElementById('product-name');
+const productPrice = document.getElementById('product-price');
+const productDescription = document.getElementById('product-description');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const colorDots = document.querySelectorAll('.color-dot');
+const shoeElements = document.querySelectorAll('.shoe');
+const navItems = document.querySelectorAll('.nav-item');
+const pageSections = document.querySelectorAll('.page-section');
+const cartBtn = document.getElementById('cart-btn');
+const cartModal = document.getElementById('cart-modal');
+const closeCartBtn = document.getElementById('close-cart');
+const cartItems = document.getElementById('cart-items');
+const cartCount = document.getElementById('cart-count');
+const cartTotal = document.getElementById('cart-total');
+const addToBagMain = document.getElementById('add-to-bag-main');
+const sneakerBtns = document.querySelectorAll('.sneaker-btn');
+
+// Initialize the website
+function init() {
+    updateSlide();
+    setupEventListeners();
+    updateCartDisplay();
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+    // Navigation
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const section = item.getAttribute('data-section');
+            switchSection(section);
+        });
+    });
+
+    // Shoe slider controls
+    prevBtn.addEventListener('click', () => {
+        if (!isTransitioning) {
+            previousSlide();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (!isTransitioning) {
+            nextSlide();
+        }
+    });
+
+    // Color dot navigation
+    colorDots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            const index = parseInt(dot.getAttribute('data-index'));
+            if (!isTransitioning && index !== currentSlide) {
+                goToSlide(index);
+            }
+        });
+    });
+
+    // Cart functionality
+    cartBtn.addEventListener('click', () => {
+        cartModal.classList.add('active');
+    });
+
+    closeCartBtn.addEventListener('click', () => {
+        cartModal.classList.remove('active');
+    });
+
+    cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.classList.remove('active');
+        }
+    });
+
+    // Add to cart - main button
+    addToBagMain.addEventListener('click', () => {
+        addToCart(shoes[currentSlide]);
+    });
+
+    // Add to cart - sneakers section buttons
+    sneakerBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const name = btn.getAttribute('data-name');
+            const price = parseInt(btn.getAttribute('data-price'));
+            const image = btn.getAttribute('data-image');
+            
+            const shoe = {
+                name: name,
+                price: price,
+                image: image
+            };
+            
+            addToCart(shoe);
+        });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (document.getElementById('new-section').classList.contains('active')) {
+            if (e.key === 'ArrowLeft' && !isTransitioning) {
+                previousSlide();
+            } else if (e.key === 'ArrowRight' && !isTransitioning) {
+                nextSlide();
+            }
+        }
+    });
+
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let endX = 0;
+
+    container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    container.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const threshold = 50;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > threshold && document.getElementById('new-section').classList.contains('active')) {
+            if (diff > 0 && !isTransitioning) {
+                nextSlide();
+            } else if (diff < 0 && !isTransitioning) {
+                previousSlide();
+            }
+        }
+    }
+}
+
+// Navigation functions
+function switchSection(sectionName) {
+    // Update navigation
+    navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('data-section') === sectionName) {
+            item.classList.add('active');
+        }
+    });
+
+    // Update page sections
+    pageSections.forEach(section => {
+        section.classList.remove('active');
+    });
+
+    document.getElementById(`${sectionName}-section`).classList.add('active');
+}
+
+// Slider functions
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % shoes.length;
+    updateSlide();
+}
+
+function previousSlide() {
+    currentSlide = (currentSlide - 1 + shoes.length) % shoes.length;
+    updateSlide();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateSlide();
+}
+
+function updateSlide() {
+    if (isTransitioning) return;
+    
+    isTransitioning = true;
+
+    // Update background color
+    container.className = `container ${shoes[currentSlide].color}`;
+
+    // Update product information
+    productName.textContent = shoes[currentSlide].name;
+    productPrice.textContent = `$${shoes[currentSlide].price}`;
+    productDescription.textContent = shoes[currentSlide].description;
+
+    // Update shoe positions
+    shoeElements.forEach((shoe, index) => {
+        shoe.classList.remove('active', 'next', 'prev');
+        
+        if (index === currentSlide) {
+            shoe.classList.add('active');
+        } else if (index === (currentSlide + 1) % shoes.length) {
+            shoe.classList.add('next');
+        } else {
+            shoe.classList.add('prev');
+        }
+    });
+
+    // Update color indicators
+    colorDots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+
+    // Reset transition lock after animation completes
+    setTimeout(() => {
+        isTransitioning = false;
+    }, 1000);
+}
+
+// Cart functions
+function addToCart(shoe) {
+    const existingItem = cart.find(item => item.name === shoe.name);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            ...shoe,
+            quantity: 1,
+            id: Date.now() + Math.random()
+        });
+    }
+    
+    updateCartDisplay();
+    showAddToCartFeedback();
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCartDisplay();
+}
+
+function updateQuantity(id, change) {
+    const item = cart.find(item => item.id === id);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            removeFromCart(id);
+        } else {
+            updateCartDisplay();
+        }
+    }
+}
+
+function updateCartDisplay() {
+    // Update cart count
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+
+    // Update cart total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.textContent = `$${total}`;
+
+    // Update cart items display
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-image" style="background-image: url('${item.image}');"></div>
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">$${item.price}</div>
+                </div>
+                <div class="cart-item-quantity">
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                </div>
+                <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
+            </div>
+        `).join('');
+    }
+}
+
+function showAddToCartFeedback() {
+    // Create temporary feedback element
+    const feedback = document.createElement('div');
+    feedback.textContent = 'Added to cart!';
+    feedback.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 50px;
+        background: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 9999;
+        font-weight: 600;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+    `;
+    
+    document.body.appendChild(feedback);
+    
+    // Animate in
+    setTimeout(() => {
+        feedback.style.opacity = '1';
+        feedback.style.transform = 'translateY(0)';
+    }, 10);
+    
+    // Remove after delay
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+        feedback.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            document.body.removeChild(feedback);
+        }, 300);
+    }, 2000);
+}
+
+// Auto-rotate slides (optional)
+function startAutoRotate() {
+    setInterval(() => {
+        if (!isTransitioning && document.getElementById('new-section').classList.contains('active')) {
+            nextSlide();
+        }
+    }, 8000); // Change slide every 8 seconds
+}
+
+// Smooth scroll to sections
+function smoothScrollTo(element) {
+    element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    // Uncomment the line below if you want auto-rotating slides
+    // startAutoRotate();
+});
+
+// Add some performance optimizations
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        // Handle any resize-specific updates here
+        updateSlide();
+    }, 250);
+});
+
+// Preload images for better performance
+function preloadImages() {
+    shoes.forEach(shoe => {
+        const img = new Image();
+        img.src = shoe.image;
+    });
+}
+
+// Call preload on init
+document.addEventListener('DOMContentLoaded', () => {
+    preloadImages();
+});
+  </script>
+</body>
+</html>
